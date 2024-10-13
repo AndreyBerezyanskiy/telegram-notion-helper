@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 7
+    MemorySize: 128
+
+Resources:
+  TelegramBotFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: app/
+      Environment:
+        Variables:
+          TELEGRAM_TOKEN: !Ref TelegramToken
+          NOTION_TOKEN: !Ref NotionToken
+          NOTION_DATABASE_ID: !Ref NotionDatabaseId
+          APP_NAME: !Ref AppName
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /webhook
+            Method: post
+  TelegramBotLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AppName}-TelegramBotFunction"
+      RetentionInDays: 14
+
+Parameters:
+  AppName:
+    Type: String
+    Description: "App name"
+  TelegramToken:
+    Type: String
+    Description: "Telegram Bot API Token"
+  NotionToken:
+    Type: String
+    Description: "Notion API Token"
+  NotionDatabaseId:
+    Type: String
+    Description: "Notion Database ID"

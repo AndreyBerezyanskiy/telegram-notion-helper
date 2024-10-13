@@ -5,7 +5,7 @@ NOTION_TOKEN = os.getenv('NOTION_TOKEN')
 NOTION_DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
 
 def create_notion_task(task_description, task_verse):
-    """Функція для створення нового завдання в базі даних Notion."""
+    """Function to create new task in database"""
     url = "https://api.notion.com/v1/pages"
 
     print("token", NOTION_TOKEN)

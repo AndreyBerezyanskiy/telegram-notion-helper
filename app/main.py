@@ -15,18 +15,15 @@ application.add_handler(CommandHandler("add", add_task))
 
 if DEVELOPMENT:
     if __name__ == '__main__':
-        print("Бот працює. Натисни Ctrl+C щоб зупинити.")
+        print("Bot is running")
         application.run_polling()
 else:
     def lambda_handler(event, context):
         """AWS Lambda entry point."""
 
-        # Lambda отримує POST-запити від Telegram
         if event.get("httpMethod") == "POST":
-            # Перетворюємо тіло запиту на об'єкт JSON
             update = Update.de_json(json.loads(event["body"]), bot)
 
-            # Обробляємо отримане оновлення
             application.update_queue.put(update)
             return {
                 'statusCode': 200,
